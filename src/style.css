@@ -1,0 +1,16 @@
+body{
+text-align:center;
+font-family:sans-serif;
+background:#111;
+color:white;
+}
+
+video{
+width:500px;
+border:2px solid white;
+}
+
+button{
+padding:10px 20px;
+margin:10px;
+}
