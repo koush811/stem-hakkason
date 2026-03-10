@@ -10,29 +10,36 @@
 
 <h1>Study Monitor</h1>
 
-<video id="video" autoplay></video>
+<video id="video" autoplay playsinline width="640"></video>
 <canvas id="canvas"></canvas>
 
-<div class="controls">
+<br><br>
+
+<select id="cameraSelect"></select>
+
 <button id="startBtn">カメラON</button>
 <button id="stopBtn">カメラOFF</button>
 
-<select id="timer">
-<option value="1800">30分</option>
-<option value="3600">60分</option>
-</select>
+<br><br>
+
+<input type="number" id="timer" min="1" step="1" placeholder="分">
 
 <button id="timerStart">タイマー開始</button>
 <button id="timerPause" disabled>一時停止</button>
 <button id="timerReset" disabled>リセット</button>
 
-<div id="timerDisplay" style="display:none; font-size:24px; color:red; margin-top:10px; font-weight:bold;">0秒</div>
+<div id="timerDisplay" style="display:none;font-size:24px;color:red;"></div>
 
 <p>サボり回数: <span id="warnCount">0</span></p>
 
-<audio id="studyVoice" src="0309.WAV"></audio>
+<p id="statusText"></p>
+
+<audio id="studyVoice" src="0309.wav"></audio>
+
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+
 <script src="script.js"></script>
+
 </body>
 </html>

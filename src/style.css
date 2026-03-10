@@ -1,16 +1,22 @@
 body{
 text-align:center;
-font-family:sans-serif;
 background:#111;
 color:white;
+font-family:sans-serif;
 }
 
 video{
-width:500px;
 border:2px solid white;
+margin-top:10px;
+}
+
+#statusText{
+color:red;
+font-size:22px;
+font-weight:bold;
 }
 
 button{
 padding:10px 20px;
-margin:10px;
+margin:5px;
 }
