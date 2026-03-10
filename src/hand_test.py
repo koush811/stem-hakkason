@@ -49,7 +49,7 @@ while True:
                     1, (0, 0, 255), 3)
 
         if not warning_played:
-            winsound.PlaySound("0309.wav", winsound.SND_FILENAME)
+            winsound.PlaySound("0309.WAV", winsound.SND_FILENAME)
             warning_played = True
 
     cv2.imshow("Study Monitor", frame)

@@ -8,7 +8,7 @@
 
 <body>
 
-<h1>Study Monitor</h1>
+<h1>寄り道なんかさせないよ☆</h1>
 
 <video id="video" autoplay playsinline width="640"></video>
 <canvas id="canvas"></canvas>
@@ -30,11 +30,34 @@
 
 <div id="timerDisplay" style="display:none;font-size:24px;color:red;"></div>
 
+<div id="countdownDisplay" style="display:none;font-size:36px;color:blue;font-weight:bold;"></div>
+
+<div id="saboriDisplay" style="display:none;font-size:20px;color:orange;"></div>
+
+<p id="endMessage" style="display:none;font-size:20px;color:green;"></p>
+
 <p>サボり回数: <span id="warnCount">0</span></p>
 
 <p id="statusText"></p>
 
+<button id="clearStorageBtn" style="background-color: #ccc; margin-top: 20px;">データをリセット</button>
+
 <audio id="studyVoice" src="0309.wav"></audio>
+
+<hr>
+
+<h2>勉強記録</h2>
+<table id="historyTable">
+  <thead>
+    <tr>
+      <th>日付</th>
+      <th>勉強時間</th>
+      <th>さぼった回数</th>
+    </tr>
+  </thead>
+  <tbody id="historyBody">
+  </tbody>
+</table>
 
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
