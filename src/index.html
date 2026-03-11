@@ -10,12 +10,17 @@
 
 <h1>寄り道なんかさせないよ☆</h1>
 
-<div id="cameraArea">
-  <video id="video" autoplay playsinline width="640"></video>
-  <canvas id="canvas" width="640" height="480"></canvas>
+<div class="content">
+  <div class="left">
+  <div id="cameraArea">
+    <video id="video" autoplay playsinline ></video>
+    <canvas id="canvas" width="100%" height="480"></canvas>
+  </div>
+
 </div>
 
-<div>
+<div class="right">
+  <div>
     <select id="cameraSelect"></select>
     <button id="startBtn">カメラON</button>
     <button id="stopBtn">カメラOFF</button>
@@ -58,6 +63,10 @@
   <tbody id="historyBody">
   </tbody>
 </table>
+
+</div>
+
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>

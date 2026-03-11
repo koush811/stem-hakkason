@@ -1,69 +1,131 @@
 body{
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: space-between;
-background: rgb(231, 231, 231);
-color:rgb(0, 0, 0);
-font-family:sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgb(231, 231, 231);
+    color:rgb(0, 0, 0);
+    font-family:sans-serif;
+    max-height:100vh;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.content{
+    width: 100%;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: repeat(2,50%);
+}
+
+.left{
+    grid-column: 1/2;
+    display: flex;
+    justify-content: center;
+}
+
+.right{
+    grid-column: 2/3;
 }
 
 #cameraArea{
   position:relative;
-  width:640px;
-  height:480px;
+  width:80%;
 }
 
 video{
   border:2px solid rgb(0, 0, 0);
   position:absolute;
-  width:640px;
-  height:480px;
+  width:100%;
 }
 
 #canvas{
   position:absolute;
-  width:640px;
-  height:480px;
+  width:100%;
   z-index:10;
 }
 
 #statusText{
-color:red;
-font-size:22px;
-font-weight:bold;
+  color:red;
+  font-size:22px;
+  font-weight:bold;
 }
 
 button{
-padding:10px 20px;
-margin:5px;
+  padding:10px 20px;
+  margin:5px;
 }
 
-#timeDisplay{
-    display:none;
-    font-size:24px;
-    color:red
+#timerDisplay{
+  display:none;
+  font-size:24px;
+  color:red;
 }
 
 #countdownDisplay{
-    display:none;
-    font-size:36px;
-    color:blue;
-    font-weight:bold;
+  font-size:36px;
+  color:blue;
+  font-weight:bold;
+  min-height:44px;
 }
 
 #saboriDisplay{
-    display:none;
-    font-size:20px;
-    color:orange;
+  display:none;
+  font-size:20px;
+  color:orange;
 }
 
 #endMessage{
-    display:none;
-    font-size:20px;
-    color:green;
+  display:none;
+  font-size:20px;
+  color:green;
 }
 
 #clearStorageBtn{
-    background-color: #ccc; 
+  background-color: #ccc;
+}
+
+/* ===== 勉強記録テーブル ===== */
+
+#historyTable{
+  border-collapse: collapse;
+  width: 95%;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+#historyTable th,
+#historyTable td{
+  border: 1px solid #555;
+  padding: 8px 12px;
+  text-align: center;
+}
+
+#historyTable thead{
+  background-color: #b0b0b0;
+  font-weight: bold;
+}
+
+#historyTable tbody tr:nth-child(even){
+  background-color: #ddd;
+}
+
+#historyTable tbody tr:hover{
+  background-color: #c8e0ff;
+}
+
+/* ===== 削除ボタン ===== */
+
+.deleteBtn{
+  padding: 4px 12px;
+  margin: 0;
+  background-color: #e05555;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.deleteBtn:hover{
+  background-color: #c03030;
 }

@@ -31,7 +31,6 @@ async function loadCameras(){
    cameraSelect.appendChild(option)
  })
 
- // フロントカメラを最初に選択（または最初のカメラ）
  if(cameraSelect.options.length > 0){
    cameraSelect.value = cameraSelect.options[0].value
  }
@@ -45,7 +44,6 @@ async function loadCameras(){
 
 loadCameras()
 
-// カメラ変更時に現在のストリームを停止
 cameraSelect.onchange = ()=>{
  if(currentStream){
    currentStream.getTracks().forEach(track=>track.stop())
@@ -68,7 +66,6 @@ cameraSelect.onchange = ()=>{
 
 document.getElementById("startBtn").onclick = async ()=>{
  try{
-   // 既に実行中なら停止
    if(currentStream){
      currentStream.getTracks().forEach(track=>track.stop())
    }
@@ -77,8 +74,6 @@ document.getElementById("startBtn").onclick = async ()=>{
    }
 
    const deviceId = cameraSelect.value
-   console.log("選択カメラ:", cameraSelect.options[cameraSelect.selectedIndex].text)
-   console.log("選択カメラID:", deviceId)
 
    const constraints = {
      video:{
@@ -89,7 +84,6 @@ document.getElementById("startBtn").onclick = async ()=>{
    }
 
    const stream = await navigator.mediaDevices.getUserMedia(constraints)
-   console.log("カメラ起動成功")
 
    video.srcObject = stream
    currentStream = stream
@@ -171,37 +165,12 @@ function warn(){
  warnCount++
  document.getElementById("warnCount").innerText = warnCount
 
- // localStorage に記録
- const today = new Date().toLocaleDateString("ja-JP")
- const key = "saboCount_" + today
- const prev = parseInt(localStorage.getItem(key) || "0")
- localStorage.setItem(key, prev + 1)
-
- const totalKey = "saboCount_total"
- const prevTotal = parseInt(localStorage.getItem(totalKey) || "0")
- localStorage.setItem(totalKey, prevTotal + 1)
-
- updateSaboStats()
-
  if(audioEnabled){
    audio.currentTime = 0
    audio.play()
  }
 
 }
-
-function updateSaboStats(){
- const today = new Date().toLocaleDateString("ja-JP")
- const todayCount = parseInt(localStorage.getItem("saboCount_" + today) || "0")
- const totalCount = parseInt(localStorage.getItem("saboCount_total") || "0")
-
- const el = document.getElementById("saboStats")
- if(el){
-   el.innerText = `今日のさぼり: ${todayCount}回 ／ 累計さぼり: ${totalCount}回`
- }
-}
-
-updateSaboStats()
 
 
 // ==========================
@@ -212,7 +181,6 @@ let timerInterval = null
 let timeLeft = 0
 let isRunning = false
 let isPaused = false
-// タイマーに入力された分数（記録用）
 let timerSetMinutes = 0
 
 document.getElementById("timerStart").onclick = ()=>{
@@ -224,7 +192,7 @@ document.getElementById("timerStart").onclick = ()=>{
  if(isNaN(minutes) || minutes <= 0) return
 
  timeLeft = minutes * 60
- timerSetMinutes = minutes  // 設定分数を保持
+ timerSetMinutes = minutes
 
  document.getElementById("timerDisplay").style.display = "block"
  document.getElementById("timerDisplay").style.color = "red"
@@ -257,8 +225,8 @@ document.getElementById("timerStart").onclick = ()=>{
 
        document.getElementById("timerDisplay").innerText = "勉強時間終了"
 
-       // タイマーに入力した分数をそのまま記録
-       saveStudyTime(timerSetMinutes)
+       // セッションごとに記録（合算しない）
+       saveStudyRecord(timerSetMinutes, warnCount)
 
        document.getElementById("timerPause").disabled = true
        document.getElementById("timerReset").disabled = true
@@ -275,53 +243,84 @@ document.getElementById("timerStart").onclick = ()=>{
 }
 
 
-function saveStudyTime(minutes){
- const today = new Date().toLocaleDateString("ja-JP")
- const key = "studyTime_" + today
- const prev = parseInt(localStorage.getItem(key) || "0")
- localStorage.setItem(key, prev + minutes)
+// ==========================
+// 勉強記録の保存（セッションごと・合算しない）
+// ==========================
 
- const totalKey = "studyTime_total"
- const prevTotal = parseInt(localStorage.getItem(totalKey) || "0")
- localStorage.setItem(totalKey, prevTotal + minutes)
+function saveStudyRecord(minutes, saboriCount){
+  const now = new Date()
+  const dateStr = now.toLocaleDateString("ja-JP", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  }) + " " + now.toLocaleTimeString("ja-JP", {
+    hour: "2-digit",
+    minute: "2-digit"
+  })
 
- // テーブルに記録を追加・更新
- addStudyRecord(today, prev + minutes)
+  const id = "record_" + now.getTime()
 
- updateStudyTimeStats()
+  const record = {
+    id: id,
+    date: dateStr,
+    minutes: minutes,
+    sabori: saboriCount
+  }
+
+  const allRecords = getRecords()
+  allRecords.push(record)
+  localStorage.setItem("studyRecords", JSON.stringify(allRecords))
+
+  addRowToTable(record)
 }
 
-function addStudyRecord(date, totalMinutes){
- const historyBody = document.getElementById("historyBody")
- if(!historyBody) return
-
- const existingRow = Array.from(historyBody.querySelectorAll("tr")).find(
-   row => row.cells[0].innerText === date
- )
-
- if(existingRow){
-   existingRow.cells[1].innerText = `${totalMinutes}分`
-   existingRow.cells[2].innerText = warnCount
- } else {
-   const row = historyBody.insertRow()
-   row.insertCell(0).innerText = date
-   row.insertCell(1).innerText = `${totalMinutes}分`
-   row.insertCell(2).innerText = warnCount
- }
+function getRecords(){
+  try {
+    return JSON.parse(localStorage.getItem("studyRecords") || "[]")
+  } catch {
+    return []
+  }
 }
 
-function updateStudyTimeStats(){
- const today = new Date().toLocaleDateString("ja-JP")
- const todayMin = parseInt(localStorage.getItem("studyTime_" + today) || "0")
- const totalMin = parseInt(localStorage.getItem("studyTime_total") || "0")
+function addRowToTable(record){
+  const historyBody = document.getElementById("historyBody")
+  if(!historyBody) return
 
- const el = document.getElementById("studyStats")
- if(el){
-   el.innerText = `今日の勉強: ${todayMin}分 ／ 累計勉強: ${totalMin}分`
- }
+  const row = historyBody.insertRow()
+  row.setAttribute("data-id", record.id)
+
+  const cellDate = row.insertCell(0)
+  const cellMin  = row.insertCell(1)
+  const cellSabo = row.insertCell(2)
+  const cellDel  = row.insertCell(3)
+
+  cellDate.innerText = record.date
+  cellMin.innerText  = `${record.minutes}分`
+  cellSabo.innerText = `${record.sabori}回`
+
+  const delBtn = document.createElement("button")
+  delBtn.innerText = "削除"
+  delBtn.className = "deleteBtn"
+  delBtn.onclick = ()=>{
+    deleteRecord(record.id, row)
+  }
+  cellDel.appendChild(delBtn)
 }
 
-updateStudyTimeStats()
+function deleteRecord(id, row){
+  if(!confirm("このデータを削除しますか？")) return
+  const allRecords = getRecords().filter(r => r.id !== id)
+  localStorage.setItem("studyRecords", JSON.stringify(allRecords))
+  row.remove()
+}
+
+// ページ読み込み時に記録を復元
+function loadRecords(){
+  const allRecords = getRecords()
+  allRecords.forEach(record => addRowToTable(record))
+}
+
+loadRecords()
 
 
 // ===== データリセット =====
@@ -434,7 +433,7 @@ function resetCountdown(){
 function updateCountdownDisplay(){
  const el = document.getElementById("countdownDisplay")
  if(el && countdownLeft > 0){
-   el.innerText = `⚠️ 手が止まっています… ${countdownLeft}秒`
+   el.innerText = `手が止まっています… ${countdownLeft}秒`
  }
 }
 
@@ -471,7 +470,6 @@ hands.onResults(results=>{
  ctx.save()
  ctx.clearRect(0,0,canvas.width,canvas.height)
 
- // カメラ映像描画
  ctx.drawImage(video,0,0,canvas.width,canvas.height)
 
  if(!isRunning || isPaused){
@@ -521,7 +519,6 @@ hands.onResults(results=>{
  }
 
  if(Date.now() - lastMoveTime > 5000){
-   statusText.innerText = "手が止まっています"
    startCountdown()
    lastMoveTime = Date.now()
  }
