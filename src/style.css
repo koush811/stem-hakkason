@@ -1,13 +1,31 @@
 body{
-text-align:center;
-background:#111;
-color:white;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: space-around;
+background: rgb(231, 231, 231);
+color:rgb(0, 0, 0);
 font-family:sans-serif;
 }
 
+#cameraArea{
+  position:relative;
+  width:640px;
+  height:480px;
+}
+
 video{
-border:2px solid white;
-margin-top:10px;
+  border:2px solid rgb(0, 0, 0);
+  position:absolute;
+  width:640px;
+  height:480px;
+}
+
+#canvas{
+  position:absolute;
+  width:640px;
+  height:480px;
+  z-index:10;
 }
 
 #statusText{
@@ -19,4 +37,34 @@ font-weight:bold;
 button{
 padding:10px 20px;
 margin:5px;
+}
+
+#timeDisplay{
+    display:none;
+    font-size:24px;
+    color:red
+}
+
+#countdownDisplay{
+    display:none;
+    font-size:36px;
+    color:blue;
+    font-weight:bold;
+}
+
+#saboriDisplay{
+    display:none;
+    font-size:20px;
+    color:orange;
+}
+
+#endMessage{
+    display:none;
+    font-size:20px;
+    color:green;
+}
+
+#clearStorageBtn{
+    background-color: #ccc; 
+    margin-top: 20px;
 }

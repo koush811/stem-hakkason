@@ -463,13 +463,23 @@ let lastY = null
 
 hands.onResults(results=>{
 
+ canvas.width = video.videoWidth
+ canvas.height = video.videoHeight
+
+ ctx.save()
+ ctx.clearRect(0,0,canvas.width,canvas.height)
+
+ // カメラ映像描画
+ ctx.drawImage(video,0,0,canvas.width,canvas.height)
+
  if(!isRunning || isPaused){
    resetCountdown()
    statusText.innerText = ""
+   ctx.restore()
    return
  }
 
- if(results.multiHandLandmarks.length > 0){
+ if(results.multiHandLandmarks && results.multiHandLandmarks.length > 0){
 
    const hand = results.multiHandLandmarks[0]
 
@@ -482,11 +492,9 @@ hands.onResults(results=>{
      const dy = Math.abs(y-lastY)
 
      if(dx > 0.02 || dy > 0.02){
-
        lastMoveTime = Date.now()
        statusText.innerText = ""
        resetCountdown()
-
      }
 
    }
@@ -494,15 +502,28 @@ hands.onResults(results=>{
    lastX = x
    lastY = y
 
- } else {
-   // 手が映っていない場合も静止扱い
+   for(const landmarks of results.multiHandLandmarks){
+
+     drawConnectors(ctx, landmarks, HAND_CONNECTIONS,{
+       color:"#9c9c9c",
+       lineWidth:4
+     })
+
+     drawLandmarks(ctx, landmarks,{
+       color:"#FF0000",
+       lineWidth:2
+     })
+
+   }
+
  }
 
- // 5秒以上動きがない場合にカウントダウン開始
  if(Date.now() - lastMoveTime > 5000){
    statusText.innerText = "手が止まっています"
    startCountdown()
    lastMoveTime = Date.now()
  }
+
+ ctx.restore()
 
 })
