@@ -2,7 +2,7 @@ body{
 display: flex;
 flex-direction: column;
 align-items: center;
-justify-content: space-around;
+justify-content: space-between;
 background: rgb(231, 231, 231);
 color:rgb(0, 0, 0);
 font-family:sans-serif;
@@ -66,5 +66,4 @@ margin:5px;
 
 #clearStorageBtn{
     background-color: #ccc; 
-    margin-top: 20px;
 }

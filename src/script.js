@@ -56,6 +56,7 @@ cameraSelect.onchange = ()=>{
    camera = null
  }
  video.srcObject = null
+ ctx.clearRect(0,0,canvas.width,canvas.height)
  cameraActive = false
  updateStartButtonState()
 }
@@ -134,6 +135,7 @@ document.getElementById("stopBtn").onclick = ()=>{
  }
 
  video.srcObject = null
+ ctx.clearRect(0,0,canvas.width,canvas.height)
  cameraActive = false
  updateStartButtonState()
 
